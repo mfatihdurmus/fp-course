@@ -94,8 +94,6 @@ product ::
 product Nil = 1
 product (x:.xs) = x * product xs
 
---  error "todo: Course.List#product"
-
 -- | Sum the elements of the list.
 --
 -- >>> sum (1 :. 2 :. 3 :. Nil)
@@ -108,8 +106,8 @@ product (x:.xs) = x * product xs
 sum ::
   List Int
   -> Int
-sum =
-  error "todo: Course.List#sum"
+sum Nil = 0
+sum (x:.xs) = x + sum xs
 
 -- | Return the length of the list.
 --
@@ -120,8 +118,8 @@ sum =
 length ::
   List a
   -> Int
-length =
-  error "todo: Course.List#length"
+length Nil = 0
+length (_:.xs) = 1 + length xs
 
 -- | Map the given function on each element of the list.
 --
@@ -135,8 +133,8 @@ map ::
   (a -> b)
   -> List a
   -> List b
-map =
-  error "todo: Course.List#map"
+map _ Nil = Nil
+map f (x:.xs) = f x :. map f xs
 
 -- | Return elements satisfying the given predicate.
 --
@@ -152,8 +150,10 @@ filter ::
   (a -> Bool)
   -> List a
   -> List a
-filter =
-  error "todo: Course.List#filter"
+filter _ Nil = Nil
+filter f (x:.xs) 
+  | f x == True = x :. filter f xs 
+  | otherwise = filter f xs
 
 -- | Append two lists to a new list.
 --
@@ -171,8 +171,9 @@ filter =
   List a
   -> List a
   -> List a
-(++) =
-  error "todo: Course.List#(++)"
+(++) a Nil = a
+(++) Nil b = b
+(++) (a:.as) b = a :. (as ++ b)
 
 infixr 5 ++
 
