@@ -91,8 +91,7 @@ headOr _ (h:._) = h
 product ::
   List Int
   -> Int
-product Nil = 1
-product (x:.xs) = x * product xs
+product = foldRight (*) 1
 
 -- | Sum the elements of the list.
 --
@@ -106,8 +105,7 @@ product (x:.xs) = x * product xs
 sum ::
   List Int
   -> Int
-sum Nil = 0
-sum (x:.xs) = x + sum xs
+sum = foldRight (+) 0 
 
 -- | Return the length of the list.
 --
@@ -118,8 +116,7 @@ sum (x:.xs) = x + sum xs
 length ::
   List a
   -> Int
-length Nil = 0
-length (_:.xs) = 1 + length xs
+length = foldRight (const (1 +)) 0
 
 -- | Map the given function on each element of the list.
 --
@@ -150,10 +147,7 @@ filter ::
   (a -> Bool)
   -> List a
   -> List a
-filter _ Nil = Nil
-filter f (x:.xs) 
-  | f x == True = x :. filter f xs 
-  | otherwise = filter f xs
+filter f = foldRight (\a as-> if f a then a :. as else as) Nil
 
 -- | Append two lists to a new list.
 --
@@ -171,9 +165,7 @@ filter f (x:.xs)
   List a
   -> List a
   -> List a
-(++) a Nil = a
-(++) Nil b = b
-(++) (a:.as) b = a :. (as ++ b)
+(++) = flip(foldRight(:.))
 
 infixr 5 ++
 
@@ -190,8 +182,7 @@ infixr 5 ++
 flatten ::
   List (List a)
   -> List a
-flatten =
-  error "todo: Course.List#flatten"
+flatten = foldRight (++) Nil
 
 -- | Map a function then flatten to a list.
 --
@@ -207,8 +198,7 @@ flatMap ::
   (a -> List b)
   -> List a
   -> List b
-flatMap =
-  error "todo: Course.List#flatMap"
+flatMap f = flatten . map f
 
 -- | Flatten a list of lists to a list (again).
 -- HOWEVER, this time use the /flatMap/ function that you just wrote.
@@ -217,8 +207,7 @@ flatMap =
 flattenAgain ::
   List (List a)
   -> List a
-flattenAgain =
-  error "todo: Course.List#flattenAgain"
+flattenAgain = flatMap id
 
 -- | Convert a list of optional values to an optional list of values.
 --
@@ -245,8 +234,8 @@ flattenAgain =
 seqOptional ::
   List (Optional a)
   -> Optional (List a)
-seqOptional =
-  error "todo: Course.List#seqOptional"
+seqOptional = 
+  error "todo"
 
 -- | Find the first element in the list matching the predicate.
 --
